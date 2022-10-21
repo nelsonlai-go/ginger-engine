@@ -12,6 +12,9 @@ type Ginger interface {
 	POST(path string, handler HandlerFunc, middleware ...gin.HandlerFunc)
 	PUT(path string, handler HandlerFunc, middleware ...gin.HandlerFunc)
 	DELETE(path string, handler HandlerFunc, middleware ...gin.HandlerFunc)
+	Register(handler RegisterHandlerFunc, option RegisterOption)
+	InitFunc(f ...func())
+	Middleware(middleware ...gin.HandlerFunc)
 }
 
 type gingerEngine struct {
@@ -60,6 +63,14 @@ func (e *gingerEngine) Register(handler RegisterHandlerFunc, option RegisterOpti
 	}
 	handler(e, option)
 	e.installed[pkgName] = true
+}
+
+func (e *gingerEngine) InitFunc(f ...func()) {
+	e.initFuncs = append(e.initFuncs, f...)
+}
+
+func (e *gingerEngine) Middleware(middleware ...gin.HandlerFunc) {
+	e.middleware = append(e.middleware, middleware...)
 }
 
 func (e *gingerEngine) GET(path string, handler HandlerFunc, middleware ...gin.HandlerFunc) {
