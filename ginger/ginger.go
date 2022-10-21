@@ -1,8 +1,6 @@
 package ginger
 
 import (
-	"reflect"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,8 +21,6 @@ type gingerEngine struct {
 	initFuncs  []func()
 	middleware []gin.HandlerFunc
 	routes     []route
-
-	installed map[string]bool
 }
 
 type route struct {
@@ -36,7 +32,6 @@ type route struct {
 func New() Ginger {
 	return &gingerEngine{
 		Engine:     *gin.New(),
-		installed:  make(map[string]bool),
 		initFuncs:  make([]func(), 0),
 		middleware: make([]gin.HandlerFunc, 0),
 		routes:     make([]route, 0),
@@ -57,12 +52,7 @@ func (e *gingerEngine) Run(addr string) {
 }
 
 func (e *gingerEngine) Register(handler RegisterHandlerFunc, option RegisterOption) {
-	pkgName := reflect.TypeOf(handler).PkgPath()
-	if _, ok := e.installed[pkgName]; ok {
-		return
-	}
 	handler(e, option)
-	e.installed[pkgName] = true
 }
 
 func (e *gingerEngine) InitFunc(f ...func()) {
