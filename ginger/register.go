@@ -11,9 +11,9 @@ type RegisterOption interface {
 	SetParam(m map[string]interface{})
 }
 
-func NewRegisterOption(m map[string]string) RegisterOption {
+func NewRegisterOption(m map[string]interface{}) RegisterOption {
 	return &registerOption{
-		param: make(map[string]interface{}),
+		param: m,
 	}
 }
 
