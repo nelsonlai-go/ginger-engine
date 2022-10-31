@@ -3,7 +3,7 @@ package rest
 import "log"
 
 // map error code to error message
-var errorMessage map[string]string
+var errorMessage map[string]string = make(map[string]string)
 
 // Register a new error
 func RegisterError(code string, message string) {
