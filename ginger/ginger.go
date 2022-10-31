@@ -31,7 +31,7 @@ type route struct {
 
 func New() Ginger {
 	return &gingerEngine{
-		Engine:     *gin.New(),
+		Engine:     *gin.Default(),
 		initFuncs:  make([]func(), 0),
 		middleware: make([]gin.HandlerFunc, 0),
 		routes:     make([]route, 0),
