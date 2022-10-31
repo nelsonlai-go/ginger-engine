@@ -27,7 +27,7 @@ func OK(ctx ginger.Context, data interface{}, p *sql.Pagination) {
 	ctx.JSON(200, resp)
 }
 
-func ERR[T any](ctx ginger.Context, errCode any, errMsg string, data any) {
+func ERR(ctx ginger.Context, errCode any, errMsg string, data any) {
 	resp := &Response{
 		Success: false,
 		Error: &Error{
