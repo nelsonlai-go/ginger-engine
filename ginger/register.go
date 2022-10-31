@@ -7,21 +7,21 @@ import (
 type RegisterHandlerFunc func(e Ginger, opt RegisterOption)
 
 type RegisterOption interface {
-	Param(key string, required bool) interface{}
-	SetParam(m map[string]interface{})
+	Param(key string, required bool) any
+	SetParam(m map[string]any)
 }
 
-func NewRegisterOption(m map[string]interface{}) RegisterOption {
+func NewRegisterOption(m map[string]any) RegisterOption {
 	return &registerOption{
 		param: m,
 	}
 }
 
 type registerOption struct {
-	param map[string]interface{}
+	param map[string]any
 }
 
-func (o *registerOption) Param(key string, required bool) interface{} {
+func (o *registerOption) Param(key string, required bool) any {
 	if v, ok := o.param[key]; ok {
 		return v
 	}
@@ -31,7 +31,7 @@ func (o *registerOption) Param(key string, required bool) interface{} {
 	return nil
 }
 
-func (o *registerOption) SetParam(m map[string]interface{}) {
+func (o *registerOption) SetParam(m map[string]any) {
 	for k, v := range m {
 		o.param[k] = v
 	}

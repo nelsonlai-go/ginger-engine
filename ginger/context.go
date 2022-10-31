@@ -3,25 +3,26 @@ package ginger
 import "github.com/gin-gonic/gin"
 
 type Context interface {
-	Param(string) interface{}
-	SetParam(string, interface{})
+	Param(string) any
+	SetParam(string, any)
 	ClientIP() string
 	RequestPath() string
-	ShouldBindUri(interface{}) error
-	ShouldBindQuery(interface{}) error
-	ShouldBindJSON(interface{}) error
+	ShouldBindUri(any) error
+	ShouldBindQuery(any) error
+	ShouldBindJSON(any) error
+	JSON(code int, obj any)
 }
 
 type gingerContext struct {
 	gin.Context
-	param map[string]interface{}
+	param map[string]any
 }
 
-func (g *gingerContext) Param(key string) interface{} {
+func (g *gingerContext) Param(key string) any {
 	return g.param[key]
 }
 
-func (g *gingerContext) SetParam(key string, val interface{}) {
+func (g *gingerContext) SetParam(key string, val any) {
 	g.param[key] = val
 }
 
