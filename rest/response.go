@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"github.com/nelsonlai-go/errs"
 	"github.com/nelsonlai-go/ginger-engine/ginger"
 	"github.com/nelsonlai-go/sql"
 )
@@ -27,12 +28,12 @@ func OK(ctx ginger.Context, data interface{}, p *sql.Pagination) {
 	ctx.JSON(200, resp)
 }
 
-func ERR(ctx ginger.Context, errCode string, data any) {
+func ERR(ctx ginger.Context, err errs.Error, data any) {
 	resp := &Response{
 		Success: false,
 		Error: &Error{
-			Code:    errCode,
-			Message: ErrorMessage(errCode),
+			Code:    err.Code(),
+			Message: err.Error(),
 		},
 		Data: data,
 	}
