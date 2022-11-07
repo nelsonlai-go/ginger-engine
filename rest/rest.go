@@ -1,8 +1,8 @@
 package rest
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/nelsonlai-go/errs"
-	"github.com/nelsonlai-go/ginger-engine/ginger"
 	"github.com/nelsonlai-go/sql"
 )
 
@@ -18,17 +18,17 @@ type Error struct {
 	Message string      `json:"message"`
 }
 
-func OK(ctx ginger.Context, data interface{}, p *sql.Pagination) {
+func OK(ctx *gin.Context, data interface{}, p *sql.Pagination) {
 	resp := &Response{
 		Success:    true,
 		Data:       data,
 		Pagination: p,
 	}
-	ctx.SetParam("response", resp)
+	ctx.Set("response", resp) // write to ctx for perform tests
 	ctx.JSON(200, resp)
 }
 
-func ERR(ctx ginger.Context, err errs.Error, data any) {
+func ERR(ctx *gin.Context, err errs.Error, data any) {
 	resp := &Response{
 		Success: false,
 		Error: &Error{
@@ -37,5 +37,6 @@ func ERR(ctx ginger.Context, err errs.Error, data any) {
 		},
 		Data: data,
 	}
+	ctx.Set("response", resp) // write to ctx for perform tests
 	ctx.JSON(200, resp)
 }

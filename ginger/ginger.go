@@ -6,11 +6,10 @@ import (
 
 type Ginger interface {
 	Run(addr string)
-	GET(path string, handler HandlerFunc, middleware ...gin.HandlerFunc)
-	POST(path string, handler HandlerFunc, middleware ...gin.HandlerFunc)
-	PUT(path string, handler HandlerFunc, middleware ...gin.HandlerFunc)
-	DELETE(path string, handler HandlerFunc, middleware ...gin.HandlerFunc)
-	Register(handler RegisterHandlerFunc, option RegisterOption)
+	GET(path string, handler gin.HandlerFunc, middleware ...gin.HandlerFunc)
+	POST(path string, handler gin.HandlerFunc, middleware ...gin.HandlerFunc)
+	PUT(path string, handler gin.HandlerFunc, middleware ...gin.HandlerFunc)
+	DELETE(path string, handler gin.HandlerFunc, middleware ...gin.HandlerFunc)
 	InitFunc(f ...func())
 	Middleware(middleware ...gin.HandlerFunc)
 }
@@ -51,10 +50,6 @@ func (e *gingerEngine) Run(addr string) {
 	e.Engine.Run(addr)
 }
 
-func (e *gingerEngine) Register(handler RegisterHandlerFunc, option RegisterOption) {
-	handler(e, option)
-}
-
 func (e *gingerEngine) InitFunc(f ...func()) {
 	e.initFuncs = append(e.initFuncs, f...)
 }
@@ -63,23 +58,23 @@ func (e *gingerEngine) Middleware(middleware ...gin.HandlerFunc) {
 	e.middleware = append(e.middleware, middleware...)
 }
 
-func (e *gingerEngine) GET(path string, handler HandlerFunc, middleware ...gin.HandlerFunc) {
+func (e *gingerEngine) GET(path string, handler gin.HandlerFunc, middleware ...gin.HandlerFunc) {
 	e.setupRoute("GET", path, handler, middleware...)
 }
 
-func (e *gingerEngine) POST(path string, handler HandlerFunc, middleware ...gin.HandlerFunc) {
+func (e *gingerEngine) POST(path string, handler gin.HandlerFunc, middleware ...gin.HandlerFunc) {
 	e.setupRoute("POST", path, handler, middleware...)
 }
 
-func (e *gingerEngine) PUT(path string, handler HandlerFunc, middleware ...gin.HandlerFunc) {
+func (e *gingerEngine) PUT(path string, handler gin.HandlerFunc, middleware ...gin.HandlerFunc) {
 	e.setupRoute("PUT", path, handler, middleware...)
 }
 
-func (e *gingerEngine) DELETE(path string, handler HandlerFunc, middleware ...gin.HandlerFunc) {
+func (e *gingerEngine) DELETE(path string, handler gin.HandlerFunc, middleware ...gin.HandlerFunc) {
 	e.setupRoute("DELETE", path, handler, middleware...)
 }
 
-func (e *gingerEngine) setupRoute(method string, path string, handler HandlerFunc, middleware ...gin.HandlerFunc) {
-	hs := append(middleware, handler.GinHandler())
+func (e *gingerEngine) setupRoute(method string, path string, handler gin.HandlerFunc, middleware ...gin.HandlerFunc) {
+	hs := append(middleware, handler)
 	e.routes = append(e.routes, route{method, path, hs})
 }

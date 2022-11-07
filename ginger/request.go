@@ -1,8 +1,12 @@
 package ginger
 
-import "reflect"
+import (
+	"reflect"
 
-func GetRequest[T any](ctx Context) *T {
+	"github.com/gin-gonic/gin"
+)
+
+func GetRequest[T any](ctx *gin.Context) *T {
 	request := new(T)
 	tags := parseRequestTags(request)
 
